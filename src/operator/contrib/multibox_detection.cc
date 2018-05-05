@@ -128,7 +128,7 @@ inline void MultiBoxDetectionForward(const Tensor<cpu, 3, DType> &out,
       }
     }  // end iter num_anchors
 
-    std::cout << valid_count << ' ' <<  num_anchors << ' ' << nbatch << std::endl;
+//    std::cout << valid_count << ' ' <<  num_anchors << ' ' << nbatch << std::endl;
 
     if (valid_count < 1 || nms_threshold <= 0 || nms_threshold > 1) continue;
 

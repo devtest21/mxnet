@@ -1,0 +1,88 @@
+44a45
+> 
+55,57c56,58
+< enum MultiBoxTargetOpInputs {kAnchor, kLabel, kClsPred};
+< enum MultiBoxTargetOpOutputs {kLoc, kLocMask, kCls};
+< enum MultiBoxTargetOpResource {kTempSpace};
+---
+> enum MultiBoxTargetOhemOpInputs {kAnchor, kLabel, kClsPred, kLocPred};
+> enum MultiBoxTargetOhemOpOutputs {kLoc, kLocMask, kCls};
+> enum MultiBoxTargetOhemOpResource {kTempSpace};
+60c61
+< struct MultiBoxTargetParam : public dmlc::Parameter<MultiBoxTargetParam> {
+---
+> struct MultiBoxTargetOhemParam : public dmlc::Parameter<MultiBoxTargetOhemParam> {
+67c68
+<   DMLC_DECLARE_PARAMETER(MultiBoxTargetParam) {
+---
+>   DMLC_DECLARE_PARAMETER(MultiBoxTargetOhemParam) {
+81c82
+< };  // struct MultiBoxTargetParam
+---
+> };  // struct MultiBoxTargetOhemParam
+84c85
+< class MultiBoxTargetOp : public Operator {
+---
+> class MultiBoxTargetOhemOp : public Operator {
+86c87
+<   explicit MultiBoxTargetOp(MultiBoxTargetParam param) {
+---
+>   explicit MultiBoxTargetOhemOp(MultiBoxTargetOhemParam param) {
+98c99
+<     CHECK_EQ(in_data.size(), 3);
+---
+>     CHECK_EQ(in_data.size(), 4);
+100a102
+> 
+103a106
+> 
+107a111,113
+>     Tensor<xpu, 2, DType> loc_preds = in_data[mboxtarget_enum::kLocPred]
+>       .get<xpu, 2, DType>(s);
+> 
+181,182c187,188
+<     MultiBoxTargetForward(loc_target, loc_mask, cls_target,
+<                           anchors, labels, cls_preds, temp_space,
+---
+>     MultiBoxTargetOhemForward(loc_target, loc_mask, cls_target,
+>                           anchors, labels, cls_preds, loc_preds, temp_space,
+206,207c212,213
+<   MultiBoxTargetParam param_;
+< };  // class MultiBoxTargetOp
+---
+>   MultiBoxTargetOhemParam param_;
+> };  // class MultiBoxTargetOhemOp
+210c216
+< Operator* CreateOp(MultiBoxTargetParam param, int dtype);
+---
+> Operator* CreateOp(MultiBoxTargetOhemParam param, int dtype);
+213c219
+< class MultiBoxTargetProp : public OperatorProperty {
+---
+> class MultiBoxTargetOhemProp : public OperatorProperty {
+216c222
+<     return {"anchor", "label", "cls_pred"};
+---
+>     return {"anchor", "label", "cls_pred", "loc_pred"};
+235c241
+<     CHECK_EQ(in_shape->size(), 3) << "Input: [anchor, label, clsPred]";
+---
+>     CHECK_EQ(in_shape->size(), 4) << "Input: [anchor, label, clsPred, locPred]";
+259,261c265,267
+<     MultiBoxTargetProp* MultiBoxTarget_sym = new MultiBoxTargetProp();
+<     MultiBoxTarget_sym->param_ = this->param_;
+<     return MultiBoxTarget_sym;
+---
+>     MultiBoxTargetOhemProp* MultiBoxTargetOhem_sym = new MultiBoxTargetOhemProp();
+>     MultiBoxTargetOhem_sym->param_ = this->param_;
+>     return MultiBoxTargetOhem_sym;
+265c271
+<     return "_contrib_MultiBoxTarget";
+---
+>     return "_contrib_MultiBoxTargetOhem";
+290,291c296,297
+<   MultiBoxTargetParam param_;
+< };  // class MultiBoxTargetProp
+---
+>   MultiBoxTargetOhemParam param_;
+> };  // class MultiBoxTargetOhemProp

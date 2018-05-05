@@ -350,7 +350,7 @@ def plot_network(symbol, title="plot", save_format='pdf', shape=None, node_attrs
                             attr["label"] = label
                         else:
                             key = input_name
-                            shape = shape_dict[key][1:]
+                            shape = shape_dict[key][:]
                             label = "x".join([str(x) for x in shape])
                             attr["label"] = label
 

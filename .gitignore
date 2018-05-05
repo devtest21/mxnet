@@ -2,4 +2,9 @@
 bin/*
 build/*
 example/*
+dmlc-core/*
 lib/*
+tests/*
+scala-package/*
+nnvm/*
+mshadow/*
